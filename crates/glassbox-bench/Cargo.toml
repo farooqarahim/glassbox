@@ -1,0 +1,31 @@
+[package]
+name = "glassbox-bench"
+description = "Reproducible benchmark harness for the Glassbox audit ledger (spec §25)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+authors.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "glassbox-bench"
+path = "src/main.rs"
+
+[dependencies]
+glassbox-core = { workspace = true }
+glassbox-storage = { workspace = true }
+serde_json = { workspace = true }
+hex = { workspace = true }
+time = { workspace = true }
+ulid = { workspace = true }
+clap = { workspace = true }
+tempfile = { workspace = true }

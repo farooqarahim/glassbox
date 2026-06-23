@@ -1,0 +1,39 @@
+[package]
+name = "glassbox-witness"
+description = "Reference witness server + publication client for the Glassbox witness network (spec §13.7, §29.6)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+authors.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "glassbox-witness"
+path = "src/main.rs"
+
+[features]
+default = []
+# Live RFC 3161 TSA round-trip support (network + TLS).
+tsa = ["dep:ureq"]
+
+[dependencies]
+glassbox-core = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+hex = { workspace = true }
+time = { workspace = true }
+clap = { workspace = true }
+ureq = { workspace = true, optional = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

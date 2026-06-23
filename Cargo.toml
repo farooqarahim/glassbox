@@ -1,0 +1,129 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/glassbox-core",
+    "crates/glassbox-storage",
+    "crates/glassbox-witness",
+    "crates/glassbox-export",
+    "crates/glassbox-mcp",
+    "crates/glassbox-server",
+    "crates/glassbox-bench",
+    "crates/glassbox-cli",
+]
+exclude = [
+    # The fuzz crate has its own workspace + needs nightly to compile.
+    "crates/glassbox-core/fuzz",
+]
+
+[workspace.package]
+version = "0.7.0"
+edition = "2024"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/glassbox-project/glassbox"
+homepage = "https://github.com/glassbox-project/glassbox"
+documentation = "https://docs.rs/glassbox-core"
+authors = ["The Glassbox Authors"]
+readme = "README.md"
+keywords = ["audit", "ledger", "cryptography", "compliance", "ai"]
+categories = ["cryptography", "database"]
+
+[workspace.lints.rust]
+# `deny` (not `forbid`) so build.rs scripts can opt into a tightly-
+# scoped #[allow] for things like env::set_var that are intrinsically
+# unsafe in the 2024 edition but safe in single-threaded build hosts.
+# Production code never opts out (see #![cfg_attr(not(test), forbid(unsafe_code))]
+# in every glassbox-* `src/lib.rs`).
+unsafe_code = "deny"
+missing_docs = "warn"
+unreachable_pub = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+missing_errors_doc = "allow"
+must_use_candidate = "allow"
+# Pedantic lints that produce noise without finding bugs in this codebase.
+similar_names = "allow"
+doc_markdown = "allow"
+single_match_else = "allow"
+cast_possible_wrap = "allow"
+cast_possible_truncation = "allow"
+cast_sign_loss = "allow"
+ptr_arg = "allow"             # serde signatures want `&Vec<u8>`
+used_underscore_binding = "allow"
+needless_pass_by_value = "allow"
+single_match = "allow"
+items_after_statements = "allow"
+return_self_not_must_use = "allow"
+uninlined_format_args = "allow"
+too_many_lines = "allow"
+cast_precision_loss = "allow"
+missing_panics_doc = "allow"
+double_must_use = "allow"
+
+[workspace.dependencies]
+glassbox-core = { path = "crates/glassbox-core", version = "0.7.0" }
+glassbox-storage = { path = "crates/glassbox-storage", version = "0.7.0" }
+glassbox-witness = { path = "crates/glassbox-witness", version = "0.7.0" }
+glassbox-export = { path = "crates/glassbox-export", version = "0.7.0" }
+glassbox-mcp = { path = "crates/glassbox-mcp", version = "0.7.0" }
+glassbox-server = { path = "crates/glassbox-server", version = "0.7.0" }
+glassbox-bench = { path = "crates/glassbox-bench", version = "0.7.0" }
+
+# crypto
+ed25519-dalek = { version = "2.2", default-features = false, features = ["std", "zeroize"] }
+ml-dsa = { version = "0.0.4", features = ["alloc"] }
+sha2 = { version = "0.10", default-features = false }
+rand_core = { version = "0.6", default-features = false, features = ["getrandom"] }
+zeroize = { version = "1.8", features = ["derive"] }
+
+# serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_jcs = "0.1"
+hex = "0.4"
+base64ct = { version = "1.6", features = ["alloc"] }
+
+# storage
+rusqlite = { version = "0.32", features = ["bundled"] }
+postgres = { version = "0.19", features = ["with-serde_json-1"] }
+
+# util
+thiserror = "2.0"
+ulid = { version = "1.1", features = ["serde"] }
+time = { version = "0.3", features = ["serde", "formatting", "parsing", "macros"] }
+clap = { version = "4.5", features = ["derive"] }
+zip = { version = "2.2", default-features = false, features = ["deflate"] }
+
+# server + bench
+tokio = { version = "1.42", features = ["rt-multi-thread", "macros", "net", "signal", "io-util", "fs", "sync"] }
+axum = { version = "0.8", default-features = false, features = ["http1", "json", "tokio"] }
+tower = "0.5"
+tonic = "0.14"
+tonic-prost = "0.14"
+prost = "0.14"
+tonic-prost-build = "0.14"
+protoc-bin-vendored = "3"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+ureq = { version = "2.10", default-features = false, features = ["tls"] }
+
+# cold-tier parquet
+arrow-array = "55"
+arrow-schema = "55"
+parquet = { version = "55", default-features = false, features = ["arrow", "snap"] }
+pdf-writer = "0.14"
+
+# test
+proptest = "1.5"
+tempfile = "3.10"
+assert_cmd = "2.0"
+predicates = "3.1"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = "symbols"
+panic = "abort"

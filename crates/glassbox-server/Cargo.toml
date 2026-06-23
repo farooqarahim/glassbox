@@ -1,0 +1,53 @@
+[package]
+name = "glassbox-server"
+description = "HTTP/JSON server exposing the Glassbox ledger over the network (spec §15 compatibility surface)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+authors.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "glassbox-server"
+path = "src/main.rs"
+
+[features]
+default = []
+# Build the gRPC surface (tonic + Protobuf). Adds a build.rs codegen step.
+grpc = ["dep:tonic", "dep:tonic-prost", "dep:prost"]
+
+[dependencies]
+glassbox-core = { workspace = true }
+glassbox-storage = { workspace = true }
+glassbox-mcp = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+hex = { workspace = true }
+time = { workspace = true }
+ulid = { workspace = true }
+tokio = { workspace = true }
+axum = { workspace = true }
+tower = { workspace = true }
+clap = { workspace = true }
+tonic = { workspace = true, optional = true }
+tonic-prost = { workspace = true, optional = true }
+prost = { workspace = true, optional = true }
+
+[build-dependencies]
+tonic-prost-build = { workspace = true }
+protoc-bin-vendored = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+reqwest = { workspace = true }
+tokio-stream = "0.1"

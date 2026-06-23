@@ -1,0 +1,40 @@
+/target
+**/*.rs.bk
+Cargo.lock.bak
+
+# editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# local ledgers and keys (never commit)
+*.glassbox
+*.glassbox-*
+*.key
+*.pem
+ledger/
+data/
+
+# JavaScript / TypeScript SDK
+node_modules/
+sdks/typescript/dist/
+*.tsbuildinfo
+
+# Python SDK
+.venv/
+venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# Go SDK
+*.test
+
+# SBOM artifacts (generated in CI)
+**/glassbox-*.cdx.json

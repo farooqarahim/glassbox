@@ -1,0 +1,107 @@
+// Glassbox gRPC service definition (spec §15.1 primary surface).
+//
+// Stable wire format starting at v0.6. Backwards-compatible field
+// additions are allowed without bumping the package version; field
+// removals or behavioural changes require a major version bump per
+// spec §15.5.
+
+syntax = "proto3";
+
+package glassbox.v1;
+
+// Read-only operations: list streams, get-by-sequence, get-last,
+// iterate. All others (append, verify, inclusion proof) are below.
+service Ledger {
+  rpc ListStreams(ListStreamsRequest) returns (ListStreamsResponse);
+  rpc GetLast(GetLastRequest) returns (GetLastResponse);
+  rpc GetRecord(GetRecordRequest) returns (GetRecordResponse);
+  rpc IterStream(IterStreamRequest) returns (IterStreamResponse);
+  rpc AppendRecord(AppendRecordRequest) returns (AppendRecordResponse);
+  rpc Verify(VerifyRequest) returns (VerifyResponse);
+  rpc InclusionProof(InclusionProofRequest) returns (InclusionProofResponse);
+}
+
+// Every authenticated request carries an auth_token whose value must
+// equal the operator-issued capability-token secret. Matches the
+// auth model used by glassbox-mcp (spec §18.3).
+message AuthHeader {
+  string token = 1;
+}
+
+message ListStreamsRequest { AuthHeader auth = 1; }
+message ListStreamsResponse { repeated string streams = 1; }
+
+message GetLastRequest {
+  AuthHeader auth = 1;
+  string stream_id = 2;
+}
+message GetLastResponse {
+  bool present = 1;
+  // JSON-encoded SignedRecord; clients decode via the same schema
+  // the HTTP server emits. Defining the full record as a Protobuf
+  // structure would require duplicating every type from
+  // glassbox-core; the JSON-as-bytes shape keeps the wire and the
+  // on-disk forms identical.
+  bytes signed_record_json = 2;
+}
+
+message GetRecordRequest {
+  AuthHeader auth = 1;
+  string stream_id = 2;
+  uint64 sequence = 3;
+}
+message GetRecordResponse {
+  bool present = 1;
+  bytes signed_record_json = 2;
+}
+
+message IterStreamRequest {
+  AuthHeader auth = 1;
+  string stream_id = 2;
+}
+message IterStreamResponse {
+  // One entry per record on the stream, in sequence order.
+  repeated bytes signed_record_json = 1;
+}
+
+message AppendRecordRequest {
+  AuthHeader auth = 1;
+  string stream_id = 2;
+  bytes signed_record_json = 3;
+}
+message AppendRecordResponse {
+  uint64 sequence = 1;
+  string this_hash_hex = 2;
+  string record_id = 3;
+}
+
+message VerifyRequest {
+  AuthHeader auth = 1;
+  string stream_id = 2;
+}
+message VerifyResponse {
+  bool ok = 1;
+  uint64 records_walked = 2;
+  uint64 signatures_verified = 3;
+  uint64 merkle_roots_checked = 4;
+  uint64 tombstones_observed = 5;
+  uint64 cross_chain_refs_verified = 6;
+  repeated uint64 redacted_sequences = 7;
+  string failure_reason = 8;
+  uint64 failure_sequence = 9;
+}
+
+message InclusionProofRequest {
+  AuthHeader auth = 1;
+  string stream_id = 2;
+  uint64 sequence = 3;
+}
+message InclusionProofResponse {
+  string leaf_hex = 1;
+  string root_hex = 2;
+  repeated ProofStep steps = 3;
+}
+message ProofStep {
+  string sibling_hex = 1;
+  bool sibling_is_right = 2;
+}

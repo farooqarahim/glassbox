@@ -1,0 +1,35 @@
+[package]
+name = "glassbox-mcp"
+description = "Model Context Protocol server exposing the Glassbox ledger to MCP-capable agents (spec §18)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+authors.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lints]
+workspace = true
+
+[[bin]]
+name = "glassbox-mcp"
+path = "src/main.rs"
+
+[dependencies]
+glassbox-core = { workspace = true }
+glassbox-storage = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+hex = { workspace = true }
+time = { workspace = true }
+ulid = { workspace = true }
+clap = { workspace = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }

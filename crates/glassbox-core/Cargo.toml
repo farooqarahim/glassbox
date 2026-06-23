@@ -1,0 +1,39 @@
+[package]
+name = "glassbox-core"
+description = "Tamper-evident audit ledger core: canonical form, hash chain, hybrid Ed25519 + ML-DSA-65 signing, Merkle tree."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+authors.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+ed25519-dalek = { workspace = true }
+ml-dsa = { workspace = true }
+sha2 = { workspace = true }
+rand_core = { workspace = true }
+zeroize = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_jcs = { workspace = true }
+hex = { workspace = true }
+base64ct = { workspace = true }
+thiserror = { workspace = true }
+ulid = { workspace = true }
+time = { workspace = true }
+
+[dev-dependencies]
+proptest = { workspace = true }
+
+[[example]]
+name = "gen_corpus"
+path = "examples/gen_corpus.rs"

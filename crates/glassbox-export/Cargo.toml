@@ -1,0 +1,36 @@
+[package]
+name = "glassbox-export"
+description = "Annex IV JSON sidecar + manifest export for Glassbox audit ledgers (spec §22)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+documentation.workspace = true
+authors.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+default = []
+# Real PDF rendering of the Annex IV sidecar via pdf-writer.
+pdf = ["dep:pdf-writer"]
+
+[dependencies]
+glassbox-core = { workspace = true }
+glassbox-storage = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+hex = { workspace = true }
+time = { workspace = true }
+zip = { workspace = true }
+pdf-writer = { workspace = true, optional = true }
+
+[dev-dependencies]
+ulid = { workspace = true }

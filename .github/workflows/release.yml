@@ -1,0 +1,77 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  id-token: write   # required for Sigstore keyless signing
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-and-sign:
+    name: build, SBOM, Sigstore sign
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - os: macos-latest
+            target: aarch64-apple-darwin
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@1.85
+      - uses: Swatinem/rust-cache@v2
+
+      - name: build release binary
+        env:
+          TARGET: ${{ matrix.target }}
+        run: cargo build --release -p glassbox-cli --target "$TARGET"
+
+      - name: install cargo-cyclonedx
+        run: cargo install --locked cargo-cyclonedx
+      - name: generate per-crate SBOM (CycloneDX)
+        run: cargo cyclonedx --format json --output-pattern package -a
+
+      - name: install cosign (Sigstore)
+        uses: sigstore/cosign-installer@v3
+
+      - name: sign release binary with Sigstore (keyless)
+        env:
+          TARGET: ${{ matrix.target }}
+        shell: bash
+        run: |
+          BIN="target/${TARGET}/release/glassbox"
+          if [[ "${TARGET}" == *windows* ]]; then BIN="${BIN}.exe"; fi
+          cosign sign-blob --yes "${BIN}" \
+            --output-signature "${BIN}.sig" \
+            --output-certificate "${BIN}.crt"
+
+      - name: collect artifacts
+        env:
+          TARGET: ${{ matrix.target }}
+        shell: bash
+        run: |
+          mkdir -p dist
+          BIN="target/${TARGET}/release/glassbox"
+          if [[ "${TARGET}" == *windows* ]]; then BIN="${BIN}.exe"; fi
+          cp "${BIN}" "dist/"
+          cp "${BIN}.sig" "dist/"
+          cp "${BIN}.crt" "dist/"
+          # Carry the SBOM(s) too — one CycloneDX file per crate.
+          find . -name 'glassbox-*.cdx.json' -not -path './dist/*' -exec cp {} dist/ \;
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: glassbox-${{ matrix.target }}
+          path: dist/
+          if-no-files-found: error

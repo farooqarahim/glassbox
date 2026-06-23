@@ -1,0 +1,41 @@
+[package]
+name = "glassbox-core-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+arbitrary = { version = "1", features = ["derive"] }
+serde_json = "1"
+glassbox-core = { path = ".." }
+
+# Prevent this crate from being treated as a workspace member.
+[workspace]
+
+[[bin]]
+name = "canonicalize_roundtrip"
+path = "fuzz_targets/canonicalize_roundtrip.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "signed_record_deserialize"
+path = "fuzz_targets/signed_record_deserialize.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "merkle_proof_verify"
+path = "fuzz_targets/merkle_proof_verify.rs"
+test = false
+doc = false
+bench = false
+
+[profile.release]
+debug = 1
