@@ -39,6 +39,8 @@ jobs:
       - uses: rustsec/audit-check@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          # paste is unmaintained (no known vuln); see deny.toml rationale.
+          ignore: RUSTSEC-2024-0436
 
   deny:
     name: cargo deny
@@ -56,7 +58,9 @@ jobs:
       - name: install cargo-cyclonedx
         run: cargo install --locked cargo-cyclonedx
       - name: generate SBOM
-        run: cargo cyclonedx --format json --output-pattern package -a
+        # `--all` emits one <crate>.cdx.json per workspace member; the
+        # `--output-pattern` flag was removed in newer cargo-cyclonedx.
+        run: cargo cyclonedx --format json --all
       - name: upload SBOM artifacts
         uses: actions/upload-artifact@v4
         with:

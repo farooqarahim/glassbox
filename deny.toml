@@ -3,7 +3,12 @@ all-features = false
 
 [advisories]
 yanked = "deny"
-ignore = []
+ignore = [
+    # `paste` is unmaintained (proc-macro, no known vulnerability). It is a
+    # deep transitive dependency of the RustCrypto / ml-dsa stack with no
+    # drop-in replacement yet. Tracked; revisit when upstreams migrate off it.
+    "RUSTSEC-2024-0436",
+]
 
 [licenses]
 confidence-threshold = 0.92
@@ -19,6 +24,9 @@ allow = [
     "Unicode-3.0",
     "CC0-1.0",
     "Unlicense",
+    # webpki-roots 1.0 ships Mozilla's CA-root data under CDLA-Permissive-2.0
+    # (a permissive data license). Pulled transitively via reqwest/rustls.
+    "CDLA-Permissive-2.0",
 ]
 
 [bans]
