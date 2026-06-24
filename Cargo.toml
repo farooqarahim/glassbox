@@ -18,7 +18,7 @@ exclude = [
 [workspace.package]
 version = "0.7.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.88"
 license = "Apache-2.0"
 repository = "https://github.com/glassbox-project/glassbox"
 homepage = "https://github.com/glassbox-project/glassbox"
@@ -74,7 +74,7 @@ glassbox-bench = { path = "crates/glassbox-bench", version = "0.7.0" }
 
 # crypto
 ed25519-dalek = { version = "2.2", default-features = false, features = ["std", "zeroize"] }
-ml-dsa = { version = "0.0.4", features = ["alloc"] }
+ml-dsa = { version = "0.1.1", features = ["alloc"] }
 sha2 = { version = "0.10", default-features = false }
 rand_core = { version = "0.6", default-features = false, features = ["getrandom"] }
 zeroize = { version = "1.8", features = ["derive"] }

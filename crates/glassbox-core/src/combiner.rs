@@ -105,7 +105,7 @@ fn or_verify_either_half(key: &HybridPublicKey, msg: &[u8], sig: &HybridSignatur
         let sig_slice: &mut [u8] = &mut sig_arr;
         sig_slice.copy_from_slice(&sig.mldsa);
         if let Some(ml_sig) = ml_dsa::Signature::<ml_dsa::MlDsa65>::decode(&sig_arr) {
-            if ml_pk.verify(msg, &ml_sig).is_ok() {
+            if ml_pk.verify_with_context(msg, &[], &ml_sig) {
                 return Ok(());
             }
         }

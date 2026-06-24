@@ -439,6 +439,13 @@ pub enum SpanKind {
 /// §12.9).
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "kind")]
+// The `interaction` variant is intentionally inline: a `RecordBody` is
+// built once and immediately canonicalised + signed, never held in bulk
+// stack collections. Boxing the large variant would not change the
+// canonical serialization (`Box<T>` serializes as `T`) but would force a
+// public-API change at every construction and match site across the CLI,
+// server, MCP, and export crates — disproportionate for a stack-size lint.
+#[allow(clippy::large_enum_variant)]
 pub enum RecordBody {
     /// A normal AI-interaction record.
     #[serde(rename = "interaction")]

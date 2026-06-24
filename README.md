@@ -3,7 +3,7 @@
 > **Tamper-evident audit ledger for AI systems.**
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Rust](https://img.shields.io/badge/rust-1.85+-orange.svg)](rust-toolchain.toml)
+[![Rust](https://img.shields.io/badge/rust-1.88+-orange.svg)](rust-toolchain.toml)
 [![Status](https://img.shields.io/badge/status-v0.7--alpha-yellow.svg)](#status)
 
 Glassbox sits between your application and any LLM and records every
@@ -114,7 +114,7 @@ cd glassbox
 cargo install --path crates/glassbox-cli
 ```
 
-You now have a `glassbox` binary on your `PATH`. Requires Rust 1.85+.
+You now have a `glassbox` binary on your `PATH`. Requires Rust 1.88+.
 
 ---
 

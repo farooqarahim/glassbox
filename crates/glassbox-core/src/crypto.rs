@@ -27,8 +27,9 @@ use ed25519_dalek::{
 };
 #[allow(unused_imports)]
 use ed25519_dalek::{Signer, Verifier};
+use ml_dsa::signature::{Keypair as _, Signer as _};
 use ml_dsa::{
-    B32, EncodedVerifyingKey as MlEncodedVerifying, KeyGen, MlDsa65, Signature as MlSignature,
+    B32, EncodedVerifyingKey as MlEncodedVerifying, MlDsa65, Signature as MlSignature,
     SigningKey as MlSigning, VerifyingKey as MlVerifying,
 };
 use rand_core::{OsRng, RngCore};
@@ -99,8 +100,11 @@ impl HybridKeypair {
         let ed_sig: Ed25519Signature = ed_sk.sign(msg);
 
         let xi: B32 = self.mldsa_xi.into();
-        let kp = MlDsa65::key_gen_internal(&xi);
-        let ml_sk: &MlSigning<MlDsa65> = kp.signing_key();
+        // `from_seed` is FIPS-204 `ML-DSA.KeyGen_internal`; the `Signer`
+        // impl on `SigningKey` is the *deterministic* sign variant with an
+        // empty context, so a given (key, message) always yields the same
+        // signature — required for a reproducible ledger.
+        let ml_sk: MlSigning<MlDsa65> = MlSigning::from_seed(&xi);
         let ml_sig: MlSignature<MlDsa65> = ml_sk.sign(msg);
 
         let ml_sig_enc = ml_sig.encode();
@@ -116,8 +120,8 @@ impl HybridKeypair {
         let ed_pk: Ed25519Verifying = ed_sk.verifying_key();
 
         let xi: B32 = self.mldsa_xi.into();
-        let kp = MlDsa65::key_gen_internal(&xi);
-        let ml_pk: &MlVerifying<MlDsa65> = kp.verifying_key();
+        let ml_sk: MlSigning<MlDsa65> = MlSigning::from_seed(&xi);
+        let ml_pk: MlVerifying<MlDsa65> = ml_sk.verifying_key();
 
         let ml_pk_enc = ml_pk.encode();
         HybridPublicKey {
@@ -184,9 +188,11 @@ impl HybridPublicKey {
         sig_slice.copy_from_slice(&sig.mldsa);
         let ml_sig = MlSignature::<MlDsa65>::decode(&sig_arr)
             .ok_or_else(|| Error::signature("ml-dsa signature failed to decode"))?;
-        ml_pk
-            .verify(msg, &ml_sig)
-            .map_err(|e| Error::signature(format!("ml-dsa-65: {e}")))?;
+        // Signing uses the deterministic, empty-context variant; verify
+        // with the matching empty context. Returns bool, not Result.
+        if !ml_pk.verify_with_context(msg, &[], &ml_sig) {
+            return Err(Error::signature("ml-dsa-65: signature did not verify"));
+        }
 
         Ok(())
     }
