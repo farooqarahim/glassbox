@@ -36,11 +36,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - uses: rustsec/audit-check@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          # paste is unmaintained (no known vuln); see deny.toml rationale.
-          ignore: RUSTSEC-2024-0436
+      - name: install cargo-audit
+        run: cargo install --locked cargo-audit
+      # Use cargo-audit directly rather than rustsec/audit-check@v2: that
+      # action fails on the `paste` *unmaintained* warning regardless of its
+      # `ignore` input. cargo-audit's --ignore correctly suppresses it.
+      # paste has no known vulnerability; see deny.toml for the rationale.
+      - name: cargo audit
+        run: cargo audit --ignore RUSTSEC-2024-0436
 
   deny:
     name: cargo deny
