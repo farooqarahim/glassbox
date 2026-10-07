@@ -117,7 +117,7 @@ jobs:
       # missing, so build them first.
       - name: build workspace binaries
         run: cargo build --workspace
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
       - name: install
