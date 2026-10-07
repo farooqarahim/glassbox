@@ -87,7 +87,7 @@ hex = "0.4"
 base64ct = { version = "1.6", features = ["alloc"] }
 
 # storage
-rusqlite = { version = "0.32", features = ["bundled"] }
+rusqlite = { version = "0.40", features = ["bundled"] }
 postgres = { version = "0.19", features = ["with-serde_json-1"] }
 
 # util
