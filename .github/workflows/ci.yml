@@ -166,7 +166,7 @@ jobs:
       - name: build workspace binaries
         working-directory: .
         run: cargo build --workspace
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v7
         with:
           go-version-file: sdks/go/go.mod
       - name: gofmt
