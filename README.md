@@ -314,3 +314,7 @@ Security issues: **do not open public issues** — see [SECURITY.md](SECURITY.md
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
+---
+
+Created and maintained by [Farooq A Rahim](https://github.com/farooqarahim).

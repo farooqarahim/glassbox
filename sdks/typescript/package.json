@@ -3,6 +3,14 @@
   "version": "0.7.0",
   "description": "Tamper-evident audit ledger client for AI systems (TypeScript SDK).",
   "license": "Apache-2.0",
+  "author": "Farooq A Rahim (https://github.com/farooqarahim)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/farooqarahim/glassbox.git",
+    "directory": "sdks/typescript"
+  },
+  "homepage": "https://github.com/farooqarahim/glassbox",
+  "bugs": "https://github.com/farooqarahim/glassbox/issues",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
