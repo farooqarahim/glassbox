@@ -3,7 +3,14 @@ all-features = false
 
 [advisories]
 yanked = "deny"
-ignore = []
+ignore = [
+    # `paste` is unmaintained (proc-macro, no known vulnerability). It is a
+    # deep transitive dependency of the RustCrypto / ml-dsa stack with no
+    # drop-in replacement yet. Tracked; revisit when upstreams migrate off it.
+    # Newer cargo-deny (used in CI) flags it even though older local versions
+    # do not, so keep this entry.
+    "RUSTSEC-2024-0436",
+]
 
 [licenses]
 confidence-threshold = 0.92

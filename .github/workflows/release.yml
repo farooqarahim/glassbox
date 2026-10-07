@@ -28,18 +28,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: dtolnay/rust-toolchain@1.85
+      - uses: dtolnay/rust-toolchain@1.88
       - uses: Swatinem/rust-cache@v2
 
       - name: build release binary
         env:
           TARGET: ${{ matrix.target }}
+        shell: bash   # PowerShell on windows-latest would not expand $TARGET
         run: cargo build --release -p glassbox-cli --target "$TARGET"
 
       - name: install cargo-cyclonedx
         run: cargo install --locked cargo-cyclonedx
       - name: generate per-crate SBOM (CycloneDX)
-        run: cargo cyclonedx --format json --output-pattern package -a
+        # `--all` emits one <crate>.cdx.json per workspace member; the
+        # `--output-pattern` flag was removed in newer cargo-cyclonedx.
+        run: cargo cyclonedx --format json --all
 
       - name: install cosign (Sigstore)
         uses: sigstore/cosign-installer@v3
