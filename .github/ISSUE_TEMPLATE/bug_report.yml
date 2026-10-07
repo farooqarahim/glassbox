@@ -1,0 +1,38 @@
+name: Bug report
+description: Something is not working as documented
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For security vulnerabilities, do **not** open an issue. See [SECURITY.md](../blob/main/SECURITY.md).
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Include what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Glassbox version / commit
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: OS and Rust version
+      description: Output of `rustc --version` and your OS.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Redact any secrets or personal data.
+      render: shell

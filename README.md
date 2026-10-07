@@ -109,7 +109,7 @@ flowchart LR
 Build from source (binary releases land once the wire format stabilises):
 
 ```sh
-git clone https://github.com/glassbox-project/glassbox
+git clone https://github.com/farooqarahim/glassbox
 cd glassbox
 cargo install --path crates/glassbox-cli
 ```
@@ -173,7 +173,7 @@ capability-token auth model.
 | **HTTP / JSON server** (`glassbox-server`) | Apps in any language over REST | `POST /v1/streams/{s}/append`, `/verify`, `GET /v1/streams`, `/last`, `/records`, inclusion proofs — bearer-token auth |
 | **gRPC** | Microservices and typed clients | Same server, `--features grpc`: tonic + Protobuf, seven RPCs |
 | **MCP server** (`glassbox-mcp`) | Claude Desktop / IDE agents logging their own actions | JSON-RPC 2.0 over stdio, 7 tools: `record_interaction`, `record_tool_call`, `record_retrieval`, `record_human_decision`, `record_sub_agent`, `query`, `verify_inclusion` |
-| **SDKs** (Python · TypeScript · Go) | Embedding in application code | `glassbox` (PyPI) · `@glassbox/sdk` (npm) · `github.com/glassbox/sdk-go` |
+| **SDKs** (Python · TypeScript · Go) | Embedding in application code | `glassbox` (PyPI) · `@glassbox/sdk` (npm) · `github.com/farooqarahim/glassbox/sdks/go` |
 
 ### SDK example (Python)
 

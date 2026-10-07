@@ -14,7 +14,7 @@ single corporate entity.
 
 ## Code of conduct
 
-Be excellent to each other. We follow the Contributor Covenant 2.1.
+Be excellent to each other. We follow the Contributor Covenant 2.1; see [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Before you open a PR
 

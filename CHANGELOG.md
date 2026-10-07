@@ -6,6 +6,24 @@ versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Rustdoc: repaired broken and redundant intra-doc links so
+  `cargo doc --workspace` builds with `-D warnings`.
+- Python SDK: `mypy --strict` and `ruff` clean; flusher and audit-callback
+  failures are now logged (`logging`) instead of silently swallowed.
+- Go SDK: module path is now `github.com/farooqarahim/glassbox/sdks/go`;
+  files gofmt-formatted.
+- Security: updated `h2` (RUSTSEC-2026-0258), `rustls` (RUSTSEC-2026-0285),
+  `anyhow` (RUSTSEC-2026-0190) and yanked `der` / `chacha20` in `Cargo.lock`.
+- `SECURITY.md`: vulnerability reports go through GitHub private reporting
+  instead of a placeholder address.
+
+### Added
+
+- Community files: `CODE_OF_CONDUCT.md`, issue and PR templates, Dependabot.
+- CI jobs for rustdoc and the Python, TypeScript and Go SDKs.
+
 ## [0.7.0] — 2026-05-13
 
 Closes the **language SDK trio (§16)** and **framework middleware
@@ -427,10 +445,11 @@ Initial alpha release. Wire format and canonical form are stable for the
   the spec for the v1.0 audit commitment.
 - Single-process CLI only. No HTTP/gRPC server in this release.
 
-[Unreleased]: https://github.com/glassbox-project/glassbox/compare/v0.6.0...HEAD
-[0.6.0]: https://github.com/glassbox-project/glassbox/releases/tag/v0.6.0
-[0.5.0]: https://github.com/glassbox-project/glassbox/releases/tag/v0.5.0
-[0.4.0]: https://github.com/glassbox-project/glassbox/releases/tag/v0.4.0
-[0.3.0]: https://github.com/glassbox-project/glassbox/releases/tag/v0.3.0
-[0.2.0]: https://github.com/glassbox-project/glassbox/releases/tag/v0.2.0
-[0.1.0]: https://github.com/glassbox-project/glassbox/releases/tag/v0.1.0
+[Unreleased]: https://github.com/farooqarahim/glassbox/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/farooqarahim/glassbox/releases/tag/v0.7.0
+[0.6.0]: https://github.com/farooqarahim/glassbox/releases/tag/v0.6.0
+[0.5.0]: https://github.com/farooqarahim/glassbox/releases/tag/v0.5.0
+[0.4.0]: https://github.com/farooqarahim/glassbox/releases/tag/v0.4.0
+[0.3.0]: https://github.com/farooqarahim/glassbox/releases/tag/v0.3.0
+[0.2.0]: https://github.com/farooqarahim/glassbox/releases/tag/v0.2.0
+[0.1.0]: https://github.com/farooqarahim/glassbox/releases/tag/v0.1.0

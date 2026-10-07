@@ -270,7 +270,7 @@ pub(crate) mod serde_b64_vec {
     }
 }
 
-/// Public alias of [`serde_b64_vec`] for downstream crates and for
+/// Public alias of the crate-private `serde_b64_vec` for downstream crates and for
 /// fields of types in [`crate::record`] that need the same encoding.
 pub mod serde_b64_vec_pub {
     use base64ct::{Base64, Encoding};

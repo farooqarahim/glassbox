@@ -89,3 +89,89 @@ jobs:
             git --no-pager diff --stat crates/glassbox-core/tests/corpus/canonical_corpus.jsonl
             exit 1
           fi
+
+  docs:
+    name: rustdoc (warnings are errors)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.88
+      - uses: Swatinem/rust-cache@v2
+      - name: cargo doc
+        env:
+          RUSTDOCFLAGS: -D warnings
+        run: cargo doc --workspace --no-deps
+
+  python-sdk:
+    name: python sdk (py${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.9", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.88
+      - uses: Swatinem/rust-cache@v2
+      # The SDK tests drive the real server binaries and skip if they are
+      # missing, so build them first.
+      - name: build workspace binaries
+        run: cargo build --workspace
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: install
+        working-directory: sdks/python
+        run: pip install -e ".[test]" ruff mypy
+      - name: ruff
+        working-directory: sdks/python
+        run: ruff check .
+      - name: mypy
+        working-directory: sdks/python
+        run: mypy --strict glassbox
+      - name: pytest
+        working-directory: sdks/python
+        run: pytest -q -rs
+
+  typescript-sdk:
+    name: typescript sdk
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdks/typescript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: sdks/typescript/package-lock.json
+      - run: npm ci
+      - name: typecheck + build
+        run: npm run build
+      - name: test
+        run: npm test
+
+  go-sdk:
+    name: go sdk
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sdks/go
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.88
+      - uses: Swatinem/rust-cache@v2
+      # SDK tests drive the real server binaries; build them first.
+      - name: build workspace binaries
+        working-directory: .
+        run: cargo build --workspace
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: sdks/go/go.mod
+      - name: gofmt
+        run: test -z "$(gofmt -l .)"
+      - name: vet
+        run: go vet ./...
+      - name: test
+        run: go test ./...

@@ -27,8 +27,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import time
-from typing import Any, Callable, Protocol
+from typing import Any, Callable
 
 from .records import (
     ContentRef,
@@ -37,9 +38,7 @@ from .records import (
     build_interaction,
 )
 
-
-class _SupportsCall(Protocol):
-    def __call__(self, *args: Any, **kwargs: Any) -> Any: ...
+_log = logging.getLogger(__name__)
 
 
 def _hash_json(value: Any) -> str:
@@ -195,8 +194,7 @@ class _Wrap:
         except Exception:  # noqa: BLE001
             # Audit failures must NOT break the application call. The
             # WalBuffer pattern guarantees durability up to the
-            # callback; downstream failures are the operator's
-            # observability problem.
-            pass
+            # callback; downstream failures are surfaced via logging.
+            _log.warning("audit callback failed", exc_info=True)
         _ = _t0
         return response

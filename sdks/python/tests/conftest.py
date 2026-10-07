@@ -4,17 +4,15 @@ SQLite ledger so every test exercises the real wire protocol."""
 from __future__ import annotations
 
 import json
-import os
 import socket
 import subprocess
 import tempfile
 import time
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 import httpx
 import pytest
-
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 

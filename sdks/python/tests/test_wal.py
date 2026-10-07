@@ -63,7 +63,8 @@ def test_wal_enqueues_and_flushes_durably(server, tmp_path):
     # want to assert — the WAL doesn't lose records on transient
     # rejections; they stay on disk.
     wal_path = tmp_path / "wal.jsonl"
-    with Client(server["base_url"], server["secret"], server["stream_id"]) as client:
+    # Nested `with` keeps the file valid on the declared Python >=3.9 floor.
+    with Client(server["base_url"], server["secret"], server["stream_id"]) as client:  # noqa: SIM117
         with WalBuffer(client, wal_path, flush_interval_seconds=0.1) as wal:
             wal.enqueue(signed)
             # Give the flusher a tick.
@@ -79,6 +80,7 @@ def test_wal_enqueues_and_flushes_durably(server, tmp_path):
 
 def test_wal_empty_buffer_flushes_to_zero(server, tmp_path):
     wal_path = tmp_path / "wal.jsonl"
-    with Client(server["base_url"], server["secret"], server["stream_id"]) as client:
+    # Nested `with` keeps the file valid on the declared Python >=3.9 floor.
+    with Client(server["base_url"], server["secret"], server["stream_id"]) as client:  # noqa: SIM117
         with WalBuffer(client, wal_path, flush_interval_seconds=0.05) as wal:
             wal.flush(timeout_seconds=1.0)

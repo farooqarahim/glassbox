@@ -2,14 +2,14 @@
 //!
 //! Per spec §13.7 a witness is an independent operator that:
 //!
-//! 1. Receives a [`SignedTreeHead`](glassbox_core::SignedTreeHead) from
+//! 1. Receives a [`SignedTreeHead`] from
 //!    a ledger operator who is publishing a fresh Merkle root.
 //! 2. Validates the STH for *internal consistency* against its own
 //!    prior observations of the same stream (i.e. the new root must
 //!    not contradict the previous one — `last_sequence` advances, and
 //!    the operator never replays a stale root).
 //! 3. Counter-signs the STH with its own hybrid keypair, returning a
-//!    [`WitnessCountersignature`](glassbox_core::WitnessCountersignature)
+//!    [`WitnessCountersignature`]
 //!    that the operator records back into the ledger.
 //!
 //! The witness's view is stored on disk as a JSON-Lines append-only

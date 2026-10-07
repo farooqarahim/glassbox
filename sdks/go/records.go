@@ -51,14 +51,14 @@ type Tag struct {
 // optional fields are pointer types so JSON encoding emits them only
 // when set (matching `Option::is_none` skip behavior).
 type InteractionBody struct {
-	Model     *ModelFingerprint  `json:"model,omitempty"`
-	Input     *ContentRef        `json:"input,omitempty"`
-	Output    *ContentRef        `json:"output,omitempty"`
-	Decision  *DecisionContext   `json:"decision,omitempty"`
-	Approval  *HumanApproval     `json:"approval,omitempty"`
-	ToolCalls []ToolInvocation   `json:"tool_calls,omitempty"`
-	Tags      []Tag              `json:"tags,omitempty"`
-	Metadata  map[string]string  `json:"metadata,omitempty"`
+	Model     *ModelFingerprint `json:"model,omitempty"`
+	Input     *ContentRef       `json:"input,omitempty"`
+	Output    *ContentRef       `json:"output,omitempty"`
+	Decision  *DecisionContext  `json:"decision,omitempty"`
+	Approval  *HumanApproval    `json:"approval,omitempty"`
+	ToolCalls []ToolInvocation  `json:"tool_calls,omitempty"`
+	Tags      []Tag             `json:"tags,omitempty"`
+	Metadata  map[string]string `json:"metadata,omitempty"`
 }
 
 // MarshalJSON ensures we never emit zero-value substructs.

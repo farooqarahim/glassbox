@@ -12,7 +12,7 @@ simple SDK shapes per §16.1). An async variant is on the v0.8 list;
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
@@ -59,10 +59,10 @@ class Client:
         )
 
     # context manager: close the underlying connection pool
-    def __enter__(self) -> "Client":
+    def __enter__(self) -> Client:  # noqa: PYI034 — no stdlib Self on py3.9
         return self
 
-    def __exit__(self, *_: Any) -> None:
+    def __exit__(self, *_: object) -> None:
         self.close()
 
     def close(self) -> None:
@@ -78,7 +78,7 @@ class Client:
 
     def list_streams(self) -> list[str]:
         """List the streams visible to this token's scope."""
-        return self._get_json("/v1/streams")["streams"]
+        return cast("list[str]", self._get_json("/v1/streams")["streams"])
 
     # --- record IO ---
 
@@ -88,7 +88,7 @@ class Client:
         body = self._get_json(f"/v1/streams/{_quote(self._stream)}/last")
         if body is None or body == {}:
             return None
-        return body
+        return cast("dict[str, Any]", body)
 
     def get(self, sequence: int) -> dict[str, Any] | None:
         """Fetch the record at ``sequence`` on the scoped stream."""
@@ -98,11 +98,14 @@ class Client:
         if r.status_code == 404:
             return None
         _ensure_ok(r)
-        return r.json()
+        return cast("dict[str, Any]", r.json())
 
     def iter_records(self) -> list[dict[str, Any]]:
         """Return every record on the scoped stream, in sequence order."""
-        return self._get_json(f"/v1/streams/{_quote(self._stream)}/records")
+        return cast(
+            "list[dict[str, Any]]",
+            self._get_json(f"/v1/streams/{_quote(self._stream)}/records"),
+        )
 
     def append(self, signed_record: dict[str, Any]) -> dict[str, Any]:
         """Append a fully-signed record. The Rust side does the
@@ -118,7 +121,7 @@ class Client:
             json=signed_record,
         )
         _ensure_ok(r)
-        return r.json()
+        return cast("dict[str, Any]", r.json())
 
     # --- verification ---
 
@@ -128,7 +131,7 @@ class Client:
             f"{self._base}/v1/streams/{_quote(self._stream)}/verify",
         )
         _ensure_ok(r)
-        return r.json()
+        return cast("dict[str, Any]", r.json())
 
     def inclusion_proof(self, sequence: int) -> dict[str, Any]:
         """Return a Merkle inclusion proof for ``sequence``."""
@@ -137,14 +140,14 @@ class Client:
             json={"sequence": sequence},
         )
         _ensure_ok(r)
-        return r.json()
+        return cast("dict[str, Any]", r.json())
 
     # --- helpers ---
 
     def _get_json(self, path: str) -> Any:
         r = self._http.get(f"{self._base}{path}")
         _ensure_ok(r)
-        return r.json()
+        return cast("dict[str, Any]", r.json())
 
 
 def _ensure_ok(r: httpx.Response) -> None:

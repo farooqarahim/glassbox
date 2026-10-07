@@ -36,7 +36,7 @@ func TestInteractionBodyRoundTrip(t *testing.T) {
 			DecisionID: "loan-1",
 			Outcome:    "approved",
 		},
-		Tags: []Tag{{Key: "decision_id", Value: "loan-1"}},
+		Tags:     []Tag{{Key: "decision_id", Value: "loan-1"}},
 		Metadata: map[string]string{"channel": "web"},
 	}
 	out, err := json.Marshal(b)

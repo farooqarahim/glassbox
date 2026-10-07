@@ -50,8 +50,8 @@ __all__ = [
     "Tag",
     "ToolInvocation",
     "WalBuffer",
+    "__version__",
     "build_interaction",
     "wrap_anthropic",
     "wrap_openai",
-    "__version__",
 ]

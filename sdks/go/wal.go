@@ -20,15 +20,15 @@ import (
 // to the configured Client; server errors leave records on disk for
 // the next pass.
 type WalBuffer struct {
-	client          *Client
-	path            string
-	flushInterval   time.Duration
-	maxPending      int
-	mu              sync.Mutex
-	pendingCount    int32
-	stop            chan struct{}
-	done            chan struct{}
-	closed          atomic.Bool
+	client        *Client
+	path          string
+	flushInterval time.Duration
+	maxPending    int
+	mu            sync.Mutex
+	pendingCount  int32
+	stop          chan struct{}
+	done          chan struct{}
+	closed        atomic.Bool
 }
 
 // WalOptions configures a WalBuffer.

@@ -15,6 +15,7 @@ the server's availability.
 from __future__ import annotations
 
 import json
+import logging
 import os
 import threading
 import time
@@ -22,6 +23,8 @@ from pathlib import Path
 from typing import Any
 
 from .client import Client, ClientError
+
+_log = logging.getLogger(__name__)
 
 
 class WalBuffer:
@@ -96,10 +99,10 @@ class WalBuffer:
         self._thread.join(timeout=2.0)
 
     # context manager
-    def __enter__(self) -> "WalBuffer":
+    def __enter__(self) -> WalBuffer:  # noqa: PYI034 — no stdlib Self on py3.9
         return self
 
-    def __exit__(self, *_: Any) -> None:
+    def __exit__(self, *_: object) -> None:
         self.close()
 
     # --- internals ---
@@ -118,8 +121,11 @@ class WalBuffer:
             except Exception:  # noqa: BLE001 — keep the flusher alive
                 # In production a retry+backoff loop is in order; v0.7
                 # ships the simplest correct version. We never lose
-                # records — they stay in the WAL.
-                pass
+                # records — they stay in the WAL and are retried on the
+                # next tick.
+                _log.warning(
+                    "WAL drain failed; records remain pending", exc_info=True
+                )
 
     def _drain_once(self) -> None:
         with self._lock:

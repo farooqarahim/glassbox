@@ -9,7 +9,7 @@ Tamper-evident audit ledger client for AI systems — Go edition.
 ## Install
 
 ```sh
-go get github.com/glassbox/sdk-go
+go get github.com/farooqarahim/glassbox/sdks/go
 ```
 
 ## Quickstart
@@ -21,7 +21,7 @@ import (
     "context"
     "log"
 
-    glassbox "github.com/glassbox/sdk-go"
+    glassbox "github.com/farooqarahim/glassbox/sdks/go"
 )
 
 func main() {

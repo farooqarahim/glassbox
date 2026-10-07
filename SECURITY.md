@@ -13,8 +13,10 @@ Until v1.0 GA, only the most recent minor release receives security fixes.
 
 **Do not file public GitHub issues for security vulnerabilities.**
 
-Email `security@glassbox.example` (placeholder pending foundation
-transfer) with a description, reproducer, and your preferred attribution.
+Use GitHub's private vulnerability reporting: go to the repository's
+**Security** tab and choose **Report a vulnerability**
+(<https://github.com/farooqarahim/glassbox/security/advisories/new>).
+Include a description, reproducer, and your preferred attribution.
 We will acknowledge within 72 hours.
 
 Per spec §23.7, our default disclosure window is 90 days from initial

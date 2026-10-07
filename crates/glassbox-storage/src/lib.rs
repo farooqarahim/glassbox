@@ -58,7 +58,7 @@ pub type Result<T> = std::result::Result<T, StorageError>;
 /// monotonic sequence within stream, matching `prev_hash_hex`, and
 /// matching `stream_id` against the stream key. Signature checking
 /// during a write is **not** required (the producer signed; the chain
-/// itself is verified end-to-end via [`Backend::verify`]).
+/// itself is verified end-to-end via [`verify_stream`]).
 pub trait Backend {
     /// Append a signed record to the named stream. The backend MUST
     /// fsync (or equivalent durability) before returning `Ok`.

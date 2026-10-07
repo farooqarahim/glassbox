@@ -2,13 +2,13 @@
 //!
 //! This crate is the only place in the workspace where cryptography
 //! lives. Every byte that gets signed passes through this crate; see
-//! `spec/glassbox-spec-v2.md` §11.1 and §13 for the contract.
+//! the Glassbox specification (§11.1 and §13) for the contract.
 //!
 //! # What lives here
 //!
 //! - [`canonical`] — RFC 8785 canonical JSON, used as the byte-stable
 //!   serialization that gets hashed and signed.
-//! - [`record`] — the [`Record`](record::Record) and related schema
+//! - [`record`] — the [`Record`] and related schema
 //!   structures (content references, model and prompt fingerprints,
 //!   agent trajectory linkage).
 //! - [`chain`] — hash-chain linkage between records.

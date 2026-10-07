@@ -13,8 +13,8 @@
 //! of `Record` (see [`SignedRecord`]) so it is impossible to write a
 //! record whose canonical form includes its own signature.
 //!
-//! The kind tag [`RecordKind`] discriminates payload-bearing records,
-//! [`KeyRegistryEntry`](crate::key_registry::KeyRegistryEntry) records,
+//! The `kind` tag on [`RecordBody`] discriminates payload-bearing records,
+//! [`KeyRegistryEntry`] records,
 //! and Merkle-root commitment records, all on the same chain.
 
 use serde::{Deserialize, Serialize};
