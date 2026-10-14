@@ -112,7 +112,7 @@ ureq = { version = "2.10", default-features = false, features = ["tls"] }
 # cold-tier parquet
 arrow-array = "55"
 arrow-schema = "55"
-parquet = { version = "55", default-features = false, features = ["arrow", "snap"] }
+parquet = { version = "60", default-features = false, features = ["arrow", "snap"] }
 pdf-writer = "0.14"
 
 # test
