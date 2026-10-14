@@ -65,7 +65,7 @@ jobs:
         # `--output-pattern` flag was removed in newer cargo-cyclonedx.
         run: cargo cyclonedx --format json --all
       - name: upload SBOM artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sbom
           path: |

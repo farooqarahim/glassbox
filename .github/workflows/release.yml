@@ -73,7 +73,7 @@ jobs:
           find . -name 'glassbox-*.cdx.json' -not -path './dist/*' -exec cp {} dist/ \;
 
       - name: upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: glassbox-${{ matrix.target }}
           path: dist/
